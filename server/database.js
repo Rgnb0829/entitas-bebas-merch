@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const bcrypt = require('bcryptjs');
 
 const dbPath = path.resolve(__dirname, 'database.sqlite');
 
@@ -99,6 +100,17 @@ function initTables() {
       if (!err && row.count === 0) {
         db.run("INSERT INTO taxes (type, rate, description) VALUES (?, ?, ?)", ['PPN', 11.0, 'Pajak Pertambahan Nilai (11%)']);
         db.run("INSERT INTO taxes (type, rate, description) VALUES (?, ?, ?)", ['PPh', 0.5, 'Pajak Penghasilan Final UMKM (0.5%)']);
+      }
+    });
+
+    // Seed Default Admin if empty
+    db.get("SELECT count(*) as count FROM admins", [], (err, row) => {
+      if (!err && row.count === 0) {
+        const defaultPassword = process.env.ADMIN_PASSWORD || 'admin123';
+        const hash = bcrypt.hashSync(defaultPassword, 10);
+        db.run("INSERT INTO admins (username, password_hash) VALUES (?, ?)", ['admin', hash], (err) => {
+          if (!err) console.log('Default admin created: username=admin');
+        });
       }
     });
   });
