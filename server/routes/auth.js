@@ -4,28 +4,9 @@ const jwt = require('jsonwebtoken');
 const db = require('../database');
 
 const router = express.Router();
-const SECRET_KEY = 'entitas_bebas_merch_secret_key_change_in_prod'; // In a real app, use environment variable
+const SECRET_KEY = 'entitas_bebas_merch_secret_key_change_in_prod';
 
-// Seed an initial admin if not exists (for development purpose)
-const seedAdmin = () => {
-    const username = 'admin';
-    const password = 'password123';
-
-    db.get("SELECT * FROM admins WHERE username = ?", [username], (err, row) => {
-        if (err) return console.error(err.message);
-        if (!row) {
-            bcrypt.hash(password, 10, (err, hash) => {
-                if (err) return console.error(err);
-                db.run("INSERT INTO admins (username, password_hash) VALUES (?, ?)", [username, hash], (err) => {
-                    if (err) console.error(err);
-                    else console.log("Default admin created: admin / password123");
-                });
-            });
-        }
-    });
-};
-
-seedAdmin();
+// wes mumet cok dancok
 
 router.post('/login', (req, res) => {
     const { username, password } = req.body;
