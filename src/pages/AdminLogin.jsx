@@ -17,7 +17,8 @@ const AdminLogin = () => {
             localStorage.setItem('adminToken', response.data.token);
             navigate('/admin/dashboard');
         } catch (err) {
-            setError('Invalid username or password');
+            const msg = err?.response?.data?.error || err?.message || 'Login failed';
+            setError(msg);
         }
     };
 
