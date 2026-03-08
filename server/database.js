@@ -103,6 +103,16 @@ function initTables() {
       }
     });
 
+    // Messages Table (Contact Form)
+    db.run(`CREATE TABLE IF NOT EXISTS messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      email TEXT,
+      message TEXT,
+      status TEXT DEFAULT 'unread',
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`);
+
     // Seed Default Admin if empty
     db.get("SELECT count(*) as count FROM admins", [], (err, row) => {
       if (!err && row.count === 0) {

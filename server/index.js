@@ -31,12 +31,14 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const financeRoutes = require('./routes/finance');
 const discountRoutes = require('./routes/discounts');
+const messageRoutes = require('./routes/messages');
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/discounts', discountRoutes);
+app.use('/api/messages', messageRoutes);
 
 app.get('/api', (req, res) => {
     res.json({ message: 'Entitas Bebas Backend Running' });

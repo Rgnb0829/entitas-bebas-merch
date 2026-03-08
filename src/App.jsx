@@ -8,6 +8,7 @@ import ProductManager from './pages/admin/ProductManager';
 import VariantManager from './pages/admin/VariantManager';
 import DiscountManager from './pages/admin/DiscountManager';
 import FinanceManager from './pages/admin/FinanceManager';
+import MessageManager from './pages/admin/MessageManager';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="variants" element={<VariantManager />} />
             <Route path="discounts" element={<DiscountManager />} />
             <Route path="finance" element={<FinanceManager />} />
+            <Route path="messages" element={<MessageManager />} />
           </Route>
         </Routes>
       </Router>

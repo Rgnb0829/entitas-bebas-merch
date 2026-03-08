@@ -378,55 +378,113 @@ const Catalog = ({ addToCart }) => {
     );
 };
 
-const Contact = () => (
-    <div className="min-h-screen bg-zinc-100 dark:bg-zinc-950 pt-32 pb-20 px-6 flex items-center animate-fade-in transition-colors duration-500">
-        <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-0 border border-zinc-300 dark:border-zinc-800">
-            <div className="bg-zinc-200/50 dark:bg-zinc-900/50 p-12 md:p-20 flex flex-col justify-between min-h-[600px]">
-                <div>
-                    <h2 className="text-5xl font-black text-black dark:text-white mb-8 uppercase tracking-tighter">Hubungi<br />Entitas</h2>
-                    <p className="text-zinc-700 dark:text-zinc-300 mb-12 max-w-sm text-lg font-medium">
-                        Apakah Anda memiliki suara yang ingin didengar? Bergabunglah dengan kolaborasi atau sampaikan distorsi Anda.
-                    </p>
+const Contact = () => {
+    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [status, setStatus] = useState({ loading: false, success: false, error: null });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus({ loading: true, success: false, error: null });
+
+        try {
+            await api.post('/api/messages', formData);
+            setStatus({ loading: false, success: true, error: null });
+            setFormData({ name: '', email: '', message: '' });
+            setTimeout(() => setStatus(prev => ({ ...prev, success: false })), 5000);
+        } catch (err) {
+            console.error(err);
+            setStatus({
+                loading: false,
+                success: false,
+                error: err.response?.data?.error || 'Gagal mengirim pesan.'
+            });
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-zinc-100 dark:bg-zinc-950 pt-32 pb-20 px-6 flex items-center animate-fade-in transition-colors duration-500">
+            <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-0 border border-zinc-300 dark:border-zinc-800">
+                <div className="bg-zinc-200/50 dark:bg-zinc-900/50 p-12 md:p-20 flex flex-col justify-between min-h-[600px]">
+                    <div>
+                        <h2 className="text-5xl font-black text-black dark:text-white mb-8 uppercase tracking-tighter">Hubungi<br />Entitas</h2>
+                        <p className="text-zinc-700 dark:text-zinc-300 mb-12 max-w-sm text-lg font-medium">
+                            Apakah Anda memiliki suara yang ingin didengar? Bergabunglah dengan kolaborasi atau sampaikan distorsi Anda.
+                        </p>
+                    </div>
+
+                    <div className="space-y-6 font-mono text-sm">
+                        <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-300">
+                            <div className="w-8 h-[1px] bg-black dark:bg-white"></div>
+                            <span>Jakarta, ID. Sector 666.</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-300">
+                            <div className="w-8 h-[1px] bg-black dark:bg-white"></div>
+                            <span>info@entitasbebas.com</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-300">
+                            <div className="w-8 h-[1px] bg-black dark:bg-white"></div>
+                            <span>@entitasbebas.merch</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="space-y-6 font-mono text-sm">
-                    <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-300">
-                        <div className="w-8 h-[1px] bg-black dark:bg-white"></div>
-                        <span>Jakarta, ID. Sector 666.</span>
-                    </div>
-                    <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-300">
-                        <div className="w-8 h-[1px] bg-black dark:bg-white"></div>
-                        <span>info@entitasbebas.com</span>
-                    </div>
-                    <div className="flex items-center gap-4 text-zinc-600 dark:text-zinc-300">
-                        <div className="w-8 h-[1px] bg-black dark:bg-white"></div>
-                        <span>@entitasbebas.merch</span>
-                    </div>
-                </div>
-            </div>
+                <div className="bg-white dark:bg-black p-12 md:p-20 border-l border-zinc-300 dark:border-zinc-800 relative">
+                    {status.success && (
+                        <div className="absolute top-8 left-12 right-12 bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 p-4 text-xs font-mono uppercase tracking-widest text-center animate-fade-in">
+                            Transmisi berhasil terkirim.
+                        </div>
+                    )}
+                    {status.error && (
+                        <div className="absolute top-8 left-12 right-12 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 p-4 text-xs font-mono uppercase tracking-widest text-center animate-fade-in">
+                            {status.error}
+                        </div>
+                    )}
 
-            <div className="bg-white dark:bg-black p-12 md:p-20 border-l border-zinc-300 dark:border-zinc-800">
-                <form className="space-y-8 h-full flex flex-col justify-center" onSubmit={(e) => e.preventDefault()}>
-                    <div className="group">
-                        <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-600 uppercase tracking-widest mb-2 group-hover:text-black dark:group-hover:text-white transition-colors">Identitas (Nama)</label>
-                        <input type="text" className="w-full bg-transparent border-b border-zinc-300 dark:border-zinc-800 text-black dark:text-white py-4 focus:outline-none focus:border-black dark:focus:border-white transition-colors font-serif text-xl placeholder-zinc-400 dark:placeholder-zinc-800" placeholder="Ketik nama anda..." />
-                    </div>
-                    <div className="group">
-                        <label className="block text-xs font-bold text-zinc-600 uppercase tracking-widest mb-2 group-hover:text-white transition-colors">Frekuensi (Email)</label>
-                        <input type="email" className="w-full bg-transparent border-b border-zinc-800 text-white py-4 focus:outline-none focus:border-white transition-colors font-serif text-xl placeholder-zinc-800" placeholder="Ketik email anda..." />
-                    </div>
-                    <div className="group">
-                        <label className="block text-xs font-bold text-zinc-600 uppercase tracking-widest mb-2 group-hover:text-white transition-colors">Pesan Distorsi</label>
-                        <textarea rows="3" className="w-full bg-transparent border-b border-zinc-800 text-white py-4 focus:outline-none focus:border-white transition-colors font-serif text-xl placeholder-zinc-800 resize-none" placeholder="Suarakan pesan anda..."></textarea>
-                    </div>
-                    <div className="pt-8">
-                        <Button className="w-full justify-center">Kirim Transmisi</Button>
-                    </div>
-                </form>
+                    <form className="space-y-8 h-full flex flex-col justify-center" onSubmit={handleSubmit}>
+                        <div className="group">
+                            <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-600 uppercase tracking-widest mb-2 group-hover:text-black dark:group-hover:text-white transition-colors">Identitas (Nama)</label>
+                            <input
+                                type="text"
+                                required
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                className="w-full bg-transparent border-b border-zinc-300 dark:border-zinc-800 text-black dark:text-white py-4 focus:outline-none focus:border-black dark:focus:border-white transition-colors font-serif text-xl placeholder-zinc-400 dark:placeholder-zinc-800"
+                                placeholder="Ketik nama anda..."
+                            />
+                        </div>
+                        <div className="group">
+                            <label className="block text-xs font-bold text-zinc-600 uppercase tracking-widest mb-2 group-hover:text-white transition-colors">Frekuensi (Email)</label>
+                            <input
+                                type="email"
+                                required
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                className="w-full bg-transparent border-b border-zinc-800 text-white py-4 focus:outline-none focus:border-white transition-colors font-serif text-xl placeholder-zinc-800"
+                                placeholder="Ketik email anda..."
+                            />
+                        </div>
+                        <div className="group">
+                            <label className="block text-xs font-bold text-zinc-600 uppercase tracking-widest mb-2 group-hover:text-white transition-colors">Pesan Distorsi</label>
+                            <textarea
+                                rows="3"
+                                required
+                                value={formData.message}
+                                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                className="w-full bg-transparent border-b border-zinc-800 text-white py-4 focus:outline-none focus:border-white transition-colors font-serif text-xl placeholder-zinc-800 resize-none"
+                                placeholder="Suarakan pesan anda..."
+                            ></textarea>
+                        </div>
+                        <div className="pt-8">
+                            <Button className="w-full justify-center" disabled={status.loading}>
+                                {status.loading ? 'Mengirim...' : 'Kirim Transmisi'}
+                            </Button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 const CartDrawer = ({ isOpen, onClose, cart, removeFromCart, clearCart }) => {
     const total = cart.reduce((sum, item) => sum + item.price, 0);

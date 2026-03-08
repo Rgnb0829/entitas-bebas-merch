@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, Palette, DollarSign, Percent, LogOut, Menu, X, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Palette, DollarSign, Percent, LogOut, Menu, X, Sun, Moon, Mail } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const AdminLayout = () => {
@@ -19,6 +19,7 @@ const AdminLayout = () => {
         { path: '/admin/dashboard/variants', label: 'Variants', icon: Palette },
         { path: '/admin/dashboard/discounts', label: 'Discounts', icon: Percent },
         { path: '/admin/dashboard/finance', label: 'Finance (Tax/HPP)', icon: DollarSign },
+        { path: '/admin/dashboard/messages', label: 'Transmisi', icon: Mail },
     ];
 
     return (
