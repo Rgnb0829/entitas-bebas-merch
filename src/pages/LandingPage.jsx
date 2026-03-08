@@ -52,15 +52,15 @@ const GlobalStyles = () => (
 
 // --- Components ---
 
-const Button = ({ children, onClick, variant = 'primary', className = '' }) => {
-    const baseStyle = "relative overflow-hidden px-8 py-4 font-black tracking-[0.2em] uppercase transition-all duration-300 text-xs border border-white group";
+const Button = ({ children, onClick, variant = 'primary', className = '', ...props }) => {
+    const baseStyle = "relative overflow-hidden px-8 py-4 font-black tracking-[0.2em] uppercase transition-all duration-300 text-xs border border-white group disabled:opacity-50 disabled:cursor-not-allowed";
     const variants = {
         primary: "bg-black text-white hover:bg-white hover:text-black dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white hover:border-black dark:hover:border-white",
         outline: "bg-transparent text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
     };
 
     return (
-        <button onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`}>
+        <button onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`} {...props}>
             <span className="relative z-10 group-hover:tracking-[0.3em] transition-all duration-300">{children}</span>
             <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-300 mix-blend-difference"></div>
         </button>
